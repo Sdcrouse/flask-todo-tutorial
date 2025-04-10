@@ -46,11 +46,16 @@ def index():
         tasks = MyTask.query.order_by(MyTask.created).all()
         return render_template("index.html", tasks=tasks)
 
-
-
-
-
-
+# Delete a task
+@app.route("/delete/<int:id>")
+def delete(id:int):
+    delete_task = MyTask.query.get_or_404(id)
+    try:
+        db.session.delete(delete_task)
+        db.session.commit()
+        return redirect("/")
+    except Exception as e:
+        return f"ERROR:{e}"
 
 
 
