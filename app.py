@@ -10,6 +10,7 @@ Scss(app)
 
 # configure the SQLite database, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATION"] = False
 db = SQLAlchemy(app)
 
 # Data class - Row of data
@@ -23,6 +24,8 @@ class MyTask(db.Model):
         # This provides a string representation of an object
         return f"Task {self.id}"
 
+with app.app_context():
+    db.create_all()
 
 # Routes to webpages
 # Home page
@@ -75,7 +78,4 @@ def edit(id:int):
 
 # Runner and debugger
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    
     app.run(debug=True)
